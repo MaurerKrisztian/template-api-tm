@@ -4,7 +4,7 @@ import { UpdateTemplateDto } from './dto/update-template.dto';
 import * as fs from 'fs';
 import Handlebars from 'handlebars';
 import { TemplateFactory } from './TemplateFactory';
-import {host, port} from '../main';
+import { port} from '../main';
 
 @Injectable()
 export class TemplateService {
@@ -14,19 +14,19 @@ export class TemplateService {
     return 'This action adds a new template';
   }
 
-  findAll() {
+  findAll(host: string) {
     const validators = this.templateFactory.getValidators();
 
     return validators.map((validator) => {
 
       return {
         name: validator.TEMPLATE_NAME,
-        link: `http://${host}:${port}/template/${validator.TEMPLATE_NAME}`,
-        playground: `http://${host}:${port}/playground?templateName=${validator.TEMPLATE_NAME}`,
+        link: `http://${host}/template/${validator.TEMPLATE_NAME}`,
+        playground: `http://${host}/playground?templateName=${validator.TEMPLATE_NAME}`,
         exampleData: validator.exampleData(),
-        templateWithExampleData: `http://${host}:${port}/template/${validator.TEMPLATE_NAME}/example`,
-        exampleDataLink: `http://${host}:${port}/template/${validator.TEMPLATE_NAME}/exampleData`,
-        rawHtml: `http://${host}:${port}/template/${validator.TEMPLATE_NAME}/raw`,
+        templateWithExampleData: `http://${host}/template/${validator.TEMPLATE_NAME}/example`,
+        exampleDataLink: `http://${host}/template/${validator.TEMPLATE_NAME}/exampleData`,
+        rawHtml: `http://${host}/template/${validator.TEMPLATE_NAME}/raw`,
         note: 'Usage: Post {link} body: exampleData structure',
       };
     });

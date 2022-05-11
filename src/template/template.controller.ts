@@ -5,7 +5,7 @@ import {
   Body,
   Patch,
   Param,
-  Delete,
+  Delete, Headers,
 } from '@nestjs/common';
 import { TemplateService } from './template.service';
 import { CreateTemplateDto } from './dto/create-template.dto';
@@ -21,8 +21,8 @@ export class TemplateController {
   }
 
   @Get()
-  findAll() {
-    return this.templateService.findAll();
+  findAll(@Headers() h) {
+    return this.templateService.findAll(h?.host );
   }
 
   @Post(':name')
