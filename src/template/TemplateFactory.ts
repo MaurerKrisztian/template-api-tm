@@ -41,10 +41,6 @@ export class TemplateFactory {
         `Template: ${templateName} not found in path: ${htmlPath}`,
       );
     }
-
-    // const css = fs
-    //   .readFileSync(`./src/template/templates/${name}/${name}.css`)
-    //   .toString();
   }
 
   findValidator(templateName: string): ITemplateValidator<any> {

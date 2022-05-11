@@ -1,9 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import * as ip from 'ip';
 
 export const port = process.env.PORT || '3012';
-export const host = process.env.HOST || ip.address();
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors();

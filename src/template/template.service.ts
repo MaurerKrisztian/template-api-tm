@@ -1,18 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { CreateTemplateDto } from './dto/create-template.dto';
-import { UpdateTemplateDto } from './dto/update-template.dto';
 import * as fs from 'fs';
-import Handlebars from 'handlebars';
 import { TemplateFactory } from './TemplateFactory';
-import { port} from '../main';
 
 @Injectable()
 export class TemplateService {
   constructor(private readonly templateFactory: TemplateFactory) {}
-
-  create(createTemplateDto: CreateTemplateDto) {
-    return 'This action adds a new template';
-  }
 
   findAll(host: string) {
     const validators = this.templateFactory.getValidators();
