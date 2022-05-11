@@ -50,13 +50,17 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.14/ace.js" type="text/javascript" charset="utf-8"></script>
 <script>
+    var getUrl = window.location;
+    var baseUrl = getUrl.protocol + "//" + getUrl.host;
     const port = '3012'
+    const host = baseUrl
+    console.log('host', host)
     const urlParams = new URLSearchParams(window.location.search);
     const myParam = urlParams.get('templateName');
 
-        const templateRawUrl = 'http://localhost:'+port+'/template/' + urlParams.get('templateName') + '/raw'
-        const templateUrl = 'http://localhost:'+port+'/template/' + urlParams.get('templateName')
-        const templateExampleDataUrl = 'http://localhost:'+port+'/template/' + urlParams.get('templateName') + '/exampleData'
+        const templateRawUrl = host + '/template/' + urlParams.get('templateName') + '/raw'
+        const templateUrl = host + '/template/' + urlParams.get('templateName')
+        const templateExampleDataUrl = host + '/template/' + urlParams.get('templateName') + '/exampleData'
 
 async function refresh(){
       const data = await fetch(templateUrl, {method: 'POST', headers: {
