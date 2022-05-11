@@ -13,11 +13,6 @@ import { CreateTemplateDto } from './dto/create-template.dto';
 export class TemplateController {
   constructor(private readonly templateService: TemplateService) {}
 
-  @Post()
-  create(@Body() createTemplateDto: CreateTemplateDto) {
-    return this.templateService.create(createTemplateDto);
-  }
-
   @Get()
   findAll(@Headers() headers) {
     return this.templateService.findAll(headers?.host);
