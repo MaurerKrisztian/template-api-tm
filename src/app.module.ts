@@ -9,7 +9,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
   imports: [
     TemplateModule,
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'playground'),
+      rootPath: join(__dirname, '..', 'src/playground'),
     }),
   ],
   controllers: [AppController],
