@@ -20,8 +20,7 @@ export class TemplateController {
 
   @Post(':name')
   findOne(@Param('name') name: string, @Body() body: any) {
-    console.log(body.data)
-    return this.templateService.findOne(name, body.data);
+    return this.templateService.findOne(name, body?.data);
   }
   @Get(':name/example')
   exampleData(@Param('name') name: string) {

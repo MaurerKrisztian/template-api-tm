@@ -2,8 +2,9 @@ import * as fs from 'fs';
 import Handlebars from 'handlebars';
 import { ITemplateValidator } from './templates/TemplateValidator';
 import { DailyEmailValidator } from './templates/daily_email/DailyEmailValidator';
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { TestTemplateValidator } from './templates/test_template/TestTemplateValidator';
+import * as path from 'path';
 
 @Injectable()
 export class TemplateFactory {
@@ -15,7 +16,6 @@ export class TemplateFactory {
   async create(templateName: string, data: any) {
     const validator: ITemplateValidator<any> = this.findValidator(templateName);
     await validator.validate(data);
-    console.log(validator.getDir());
     const html = this.getHtml(templateName, validator.getDir());
     const template = Handlebars.compile(html);
     return template({ data: data });
@@ -24,21 +24,21 @@ export class TemplateFactory {
   async createWithExample(templateName: string) {
     const validator: ITemplateValidator<any> = this.findValidator(templateName);
     await validator.validate(validator.exampleData());
-    console.log(validator.getDir());
     const html = this.getHtml(templateName, validator.getDir());
     const template = Handlebars.compile(html);
     return template({ data: validator.exampleData() });
   }
 
   getHtml(templateName: string, dir: string): string {
-    const htmlPath = `${dir}/${templateName}.handlebars`;
+    const htmlPath = path.join(dir, `${templateName}.handlebars`);
     try {
       const html = fs.readFileSync(htmlPath).toString();
       return html;
     } catch (e) {
       console.log(e);
-      throw new Error(
+      throw new HttpException(
         `Template: ${templateName} not found in path: ${htmlPath}`,
+        400,
       );
     }
   }
@@ -48,18 +48,21 @@ export class TemplateFactory {
       return validator.isAccept(templateName);
     });
     if (!validator) {
-      throw new Error('validator not found with name: ' + templateName);
+      throw new HttpException(
+        `[validator] Template not found with name: ${templateName}. Available templates: [${this.getAllTemplates()}]`,
+        400,
+      );
     }
     return validator;
   }
 
-  getAllTemplates() {
+  getAllTemplates(): string[] {
     return this.validators.map((validator) => {
       return validator.TEMPLATE_NAME;
     });
   }
 
-  getValidators() {
+  getValidators(): ITemplateValidator<any>[] {
     return this.validators;
   }
 }
