@@ -1,8 +1,14 @@
 import { Injectable } from '@nestjs/common';
+import { readFileSync } from 'fs';
 
 @Injectable()
 export class AppService {
-  getHello(): string {
-    return 'Hello World!';
+  getVersion() {
+    return {
+      message: `API version: v${
+        JSON.parse(readFileSync('package.json').toString()).version
+      }`,
+      templateList: '/template',
+    };
   }
 }

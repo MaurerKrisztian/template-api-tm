@@ -1,5 +1,5 @@
 import { TemplateValidatorAbstract } from '../TemplateValidator';
-import { validate, IsString, ValidateNested, IsArray } from 'class-validator';
+import { IsString, ValidateNested, IsArray } from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class DailyEmailValidator extends TemplateValidatorAbstract<IDailyEmailData> {
@@ -40,7 +40,6 @@ export class DailyEmailDataDto {
   data: DailyEmailDto[] = [];
 
   constructor(data: IDailyEmailData) {
-    console.log('ddddddd', data);
     for (const d of data) {
       this.data.push(new DailyEmailDto(d));
     }
