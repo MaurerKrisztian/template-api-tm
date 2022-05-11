@@ -14,7 +14,7 @@ import { ConfigModule } from '@nestjs/config';
     }),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, 'playground'),
-      renderPath: 'playground',
+      renderPath: '/playground',
     }),
   ],
   controllers: [AppController],
