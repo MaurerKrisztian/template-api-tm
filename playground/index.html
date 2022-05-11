@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>ACE in Action</title>
+    <style type="text/css" media="screen">
+        /*#editor {*/
+        /*    position: absolute;*/
+        /*    top: 0;*/
+        /*    right: 0;*/
+        /*    bottom: 0;*/
+        /*    left: 0;*/
+        /*    height: 50%;*/
+        /*}*/
+        #parent {
+            width:100%;
+            height: 200px;
+            display:inline-block;
+            position:relative;
+        }
+        #editor {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+        }
+
+        #render {
+            position: absolute;
+            right: 10px;
+            top: 10px
+        }
+
+        #preview {
+            /*position: absolute;*/
+            /*bottom: 0;*/
+            /*width: 100%;*/
+            /*height: 42%;*/
+        }
+    </style>
+</head>
+<body>
+<div id="parent">
+<div id="editor">no data</div>
+</div>
+
+<!--<iframe id="preview" src="https://www.w3schools.com" title="W3Schools Free Online Web Tutorials"></iframe>-->
+<div id="preview"></div>
+<button id="render" >render</button>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.14/ace.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const myParam = urlParams.get('templateName');
+
+        const templateRawUrl = 'http://localhost:3000/template/' + urlParams.get('templateName') + '/raw'
+        const templateUrl = 'http://localhost:3000/template/' + urlParams.get('templateName')
+        const templateExampleDataUrl = 'http://localhost:3000/template/' + urlParams.get('templateName') + '/exampleData'
+
+async function refresh(){
+      const data = await fetch(templateUrl, {method: 'POST', headers: {
+              'Content-Type': 'application/json',
+          }, body: JSON.stringify({data: JSON.parse(editor.getValue())})})
+    console.log(data.status)
+        const html = await data.text();
+
+      console.log("got", html)
+        document.getElementById('preview').innerHTML = html
+
+
+}
+
+
+    async function getRawTemplate() {
+        const data = await fetch(templateRawUrl)
+        const html = await data.text();
+        console.log(html)
+        editor.setValue(html)
+    }
+
+    async function getExampleDataTemplate() {
+        const data = await fetch(templateExampleDataUrl)
+        const json = await data.json();
+        console.log(json)
+        return json;
+    }
+
+    var editor = ace.edit("editor");
+    editor.setTheme("ace/theme/monokai");
+    editor.session.setMode("ace/mode/json");
+
+    document.getElementById('render').addEventListener('click', ()=>{
+        console.log("aaaaaaaa")
+        refresh()
+    })
+    editor.setValue("the new text here");
+
+    async function init() {
+        const data = await getExampleDataTemplate()
+        editor.setValue(JSON.stringify(data, null, 2))
+    }
+
+    init()
+
+
+</script>
+</body>
+</html>
