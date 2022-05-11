@@ -1,41 +1,14 @@
-import { ITemplateValidator } from '../TemplateValidator';
+import { TemplateValidatorAbstract } from '../TemplateValidator';
 import { validate, IsString, ValidateNested, IsArray } from 'class-validator';
-import {HttpException, HttpStatus, Logger} from '@nestjs/common';
 import { Type } from 'class-transformer';
-import * as path from 'path';
 
-export class DailyEmailValidator
-  implements ITemplateValidator<IDailyEmailData>
-{
-  public readonly TEMPLATE_NAME = 'daily_email';
-  private readonly logger = new Logger(DailyEmailValidator.name);
-
-  isAccept(templateName: string) {
-    return templateName == this.TEMPLATE_NAME;
+export class DailyEmailValidator extends TemplateValidatorAbstract<IDailyEmailData> {
+  constructor() {
+    super('daily_email');
   }
 
   async validate(data: IDailyEmailData): Promise<boolean> {
-    const errors = await validate(new DailyEmailDataDto(data), { validationError: { target: false } });
-    if (errors.length > 0) {
-      this.logger.error(
-        `[${this.TEMPLATE_NAME}] Validation failed: `,
-        errors,
-      );
-
-      throw new HttpException(
-        `[${this.TEMPLATE_NAME}] Validation failed: ` +
-        JSON.stringify(errors, null, 2),
-        HttpStatus.BAD_REQUEST,
-      );
-    }
-    return errors.length == 0;
-  }
-
-  getDir() {
-    return path.resolve(
-      __dirname,
-      // `${DailyEmailValidator.TEMPLATE_NAME}.handlebars`,
-    );
+    return this.validateDto(new DailyEmailDataDto(data));
   }
 
   exampleData(): IDailyEmailData {
@@ -67,6 +40,7 @@ export class DailyEmailDataDto {
   data: DailyEmailDto[] = [];
 
   constructor(data: IDailyEmailData) {
+    console.log('ddddddd', data);
     for (const d of data) {
       this.data.push(new DailyEmailDto(d));
     }

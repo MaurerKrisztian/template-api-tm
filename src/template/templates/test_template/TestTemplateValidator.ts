@@ -1,40 +1,13 @@
-import { ITemplateValidator } from '../TemplateValidator';
-import { validate, IsString, ValidateNested, IsArray } from 'class-validator';
-import { HttpException, HttpStatus, Logger } from '@nestjs/common';
-import { Type } from 'class-transformer';
-import * as path from 'path';
+import { TemplateValidatorAbstract } from '../TemplateValidator';
+import { IsString } from 'class-validator';
 
-export class TestTemplateValidator
-  implements ITemplateValidator<ITestTemplateData>
-{
-  public readonly TEMPLATE_NAME = 'test_template';
-  private readonly logger = new Logger(TestTemplateValidator.name);
-
-  isAccept(templateName: string) {
-    return templateName == this.TEMPLATE_NAME;
+export class TestTemplateValidator extends TemplateValidatorAbstract<ITestTemplateData> {
+  constructor() {
+    super('test_template');
   }
 
   async validate(data: ITestTemplateData): Promise<boolean> {
-    const errors = await validate(new TestTemplateDataDto(data), {
-      validationError: { target: false },
-    });
-    if (errors.length > 0) {
-      this.logger.error(`[${this.TEMPLATE_NAME}] Validation failed: `, errors);
-
-      throw new HttpException(
-        `[${this.TEMPLATE_NAME}] Validation failed: ` +
-          JSON.stringify(errors, null, 2),
-        HttpStatus.BAD_REQUEST,
-      );
-    }
-    return errors.length == 0;
-  }
-
-  getDir() {
-    return path.resolve(
-      __dirname,
-      // `${DailyEmailValidator.TEMPLATE_NAME}.handlebars`,
-    );
+    return this.validateDto(new TestTemplateDataDto(data));
   }
 
   exampleData(): ITestTemplateData {
