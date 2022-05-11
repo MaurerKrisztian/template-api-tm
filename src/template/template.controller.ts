@@ -15,7 +15,7 @@ export class TemplateController {
 
   @Get()
   findAll(@Headers() headers) {
-    return this.templateService.findAll(headers?.host);
+    return this.templateService.findAll(process.env.MY_HOST || headers?.host);
   }
 
   @Post(':name')
