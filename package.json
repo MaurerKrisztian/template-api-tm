@@ -33,7 +33,8 @@
     "path": "^0.12.7",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
-    "rxjs": "^7.2.0"
+    "rxjs": "^7.2.0",
+    "webpack": "^5.72.1"
   },
   "devDependencies": {
     "@nestjs/cli": "^8.0.0",
