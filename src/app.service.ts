@@ -10,9 +10,7 @@ export class AppService {
 
   getVersion() {
     return {
-      message: `API version: v${
-        JSON.parse(readFileSync('package.json').toString()).version
-      }`,
+      version: JSON.parse(readFileSync('package.json').toString()).version,
       templateList: '/template',
     };
   }

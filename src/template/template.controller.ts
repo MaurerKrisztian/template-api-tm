@@ -4,10 +4,15 @@ import {
   Post,
   Body,
   Param,
-   Headers,
+  Headers,
+  Res,
+  Query,
 } from '@nestjs/common';
 import { TemplateService } from './template.service';
-import { CreateTemplateDto } from './dto/create-template.dto';
+import { Readable } from 'stream';
+import { Response } from 'express';
+import { PdfService } from './PdfService';
+import * as inlineCss from 'inline-css';
 
 @Controller('template')
 export class TemplateController {
@@ -19,12 +24,23 @@ export class TemplateController {
   }
 
   @Post(':name')
-  findOne(@Param('name') name: string, @Body() body: any) {
-    return this.templateService.findOne(name, body?.data);
+  async findOne(
+    @Param('name') name: string,
+    @Body() body: any,
+    @Res() res: Response,
+    @Query('type') type = 'html',
+  ) {
+    const html = await this.templateService.findOne(name, body?.data);
+    this.resSender(type, html, res);
   }
   @Get(':name/example')
-  exampleData(@Param('name') name: string) {
-    return this.templateService.getWithExampleData(name);
+  async exampleData(
+    @Param('name') name: string,
+    @Res() res,
+    @Query('type') type = 'html',
+  ) {
+    const html = await this.templateService.getWithExampleData(name);
+    this.resSender(type, html, res);
   }
 
   @Get(':name/exampleData')
@@ -35,5 +51,24 @@ export class TemplateController {
   @Get(':name/raw')
   rawHtml(@Param('name') name: string) {
     return this.templateService.getRawHtml(name);
+  }
+
+  async resSender(type: string, html: string, res: Response) {
+    switch (type) {
+      case 'html_string':
+        res.send(html);
+        break;
+      case 'pdf_stream':
+        res.setHeader('Content-disposition', 'inline; filename=file.pdf');
+        const pdf: any = await PdfService.resolvePdf(html);
+        Readable.from(pdf).pipe(res);
+        break;
+      case 'pdf_buffer':
+        res.setHeader('Content-disposition', 'attachment; filename=file.pdf');
+        const pdfBuffer: any = await PdfService.resolvePdf(html);
+        res.send(pdfBuffer);
+      default:
+        res.send(html);
+    }
   }
 }

@@ -5,18 +5,22 @@ import { DailyEmailValidator } from './templates/daily_email/DailyEmailValidator
 import { HttpException, Injectable } from '@nestjs/common';
 import { TestTemplateValidator } from './templates/test_template/TestTemplateValidator';
 import * as path from 'path';
+import { MeetingValidator } from './templates/meeting_template/MeetingValidator';
+import pdf from 'html-pdf';
+import * as inlineCss from 'inline-css';
 
 @Injectable()
 export class TemplateFactory {
   private readonly validators: ITemplateValidator<any>[] = [
     new DailyEmailValidator(),
     new TestTemplateValidator(),
+    new MeetingValidator(),
   ];
 
   async create(templateName: string, data: any) {
     const validator: ITemplateValidator<any> = this.findValidator(templateName);
     await validator.validate(data);
-    const html = this.getHtml(templateName, validator.getDir());
+    const html = await this.getHtml(templateName, validator.getDir());
     const template = Handlebars.compile(html);
     return template({ data: data });
   }
@@ -24,15 +28,24 @@ export class TemplateFactory {
   async createWithExample(templateName: string) {
     const validator: ITemplateValidator<any> = this.findValidator(templateName);
     await validator.validate(validator.exampleData());
-    const html = this.getHtml(templateName, validator.getDir());
+    const html = await this.getHtml(templateName, validator.getDir());
     const template = Handlebars.compile(html);
+
+    console.log('itt jio');
     return template({ data: validator.exampleData() });
   }
 
-  getHtml(templateName: string, dir: string): string {
+  async getHtml(
+    templateName: string,
+    dir: string,
+    isInlineCss = true,
+  ): Promise<string> {
     const htmlPath = path.join(dir, `${templateName}.handlebars`);
     try {
-      const html = fs.readFileSync(htmlPath).toString();
+      let html = fs.readFileSync(htmlPath).toString();
+      if (isInlineCss) {
+        html = await inlineCss(html, { url: 'filePath' });
+      }
       return html;
     } catch (e) {
       console.log(e);

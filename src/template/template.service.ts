@@ -11,16 +11,27 @@ export class TemplateService {
     const validators = this.templateFactory.getValidators();
 
     return validators.map((validator) => {
-
       return {
         name: validator.TEMPLATE_NAME,
-        link: `http://${host}/template/${validator.TEMPLATE_NAME}`,
-        playground: `http://${host}/playground?templateName=${validator.TEMPLATE_NAME}`,
-        exampleData: validator.exampleData(),
-        templateWithExampleData: `http://${host}/template/${validator.TEMPLATE_NAME}/example`,
-        exampleDataLink: `http://${host}/template/${validator.TEMPLATE_NAME}/exampleData`,
-        rawHtml: `http://${host}/template/${validator.TEMPLATE_NAME}/raw`,
-        note: 'Usage: Post {link} body: exampleData structure',
+        test: {
+          playground: `http://${host}/playground?templateName=${validator.TEMPLATE_NAME}`,
+          rawHtml: `http://${host}/template/${validator.TEMPLATE_NAME}/raw`,
+          demo: {
+            html: `http://${host}/template/${validator.TEMPLATE_NAME}/example`,
+            pdfBuffer: `http://${host}/template/${validator.TEMPLATE_NAME}/example?type=pdf_buffer`,
+            pdfStream: `http://${host}/template/${validator.TEMPLATE_NAME}/example?type=pdf_stream`,
+          },
+          data: {
+            exampleData: validator.exampleData(),
+            exampleDataLink: `http://${host}/template/${validator.TEMPLATE_NAME}/exampleData`,
+          },
+        },
+        links: {
+          htmlString: `http://${host}/template/${validator.TEMPLATE_NAME}`,
+          pdfBuffer: `http://${host}/template/${validator.TEMPLATE_NAME}?type=pdf_buffer`,
+          pdfStream: `http://${host}/template/${validator.TEMPLATE_NAME}?type=pdf_stream`,
+          note: 'Usage: Post {link} body: exampleData structure',
+        },
       };
     });
   }
