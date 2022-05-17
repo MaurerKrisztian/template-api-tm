@@ -2,4 +2,4 @@
 
 Template microservice.
 
-Demo: https://test.mytaskplan.me/template
+Demo: https://template.mytaskplan.me/template
