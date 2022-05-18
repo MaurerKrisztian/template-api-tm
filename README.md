@@ -1,11 +1,12 @@
 # tempalte-api-tm
 
-Template microservice. Generate html (email compatible) and pdf from the given template and data. 
+Template microservice. Generate html (email compatible) and pdf from the given template and data.
 
 ### Features:
 - fill html templates with data
 - convert html css to inline css for emails
 - pdf creation form template with data (get buffer / stream)
+- Send email with template.
 
 ### Add template:
 1. In /src/templates/template create a new forlder with {templateName}
