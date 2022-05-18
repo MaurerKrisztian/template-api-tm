@@ -5,6 +5,7 @@ import { TemplateModule } from './template/template.module';
 import { join } from 'path';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { ConfigModule } from '@nestjs/config';
+import { MailModule } from './mail/mail.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { ConfigModule } from '@nestjs/config';
       rootPath: join(__dirname, 'playground'),
       renderPath: '/playground',
     }),
+    MailModule,
   ],
   controllers: [AppController],
   providers: [AppService],

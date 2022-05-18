@@ -11,8 +11,8 @@ import {
 import { TemplateService } from './template.service';
 import { Readable } from 'stream';
 import { Response } from 'express';
-import { PdfService } from './PdfService';
 import * as inlineCss from 'inline-css';
+import {PdfService} from "./services/PdfService";
 
 @Controller('template')
 export class TemplateController {
@@ -30,7 +30,7 @@ export class TemplateController {
     @Res() res: Response,
     @Query('type') type = 'html',
   ) {
-    const html = await this.templateService.findOne(name, body?.data);
+    const html = await this.templateService.getHtmlWithData(name, body?.data);
     this.resSender(type, html, res);
   }
   @Get(':name/example')

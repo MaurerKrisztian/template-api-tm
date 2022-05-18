@@ -22,7 +22,8 @@ export class TemplateFactory {
     await validator.validate(data);
     const html = await this.getHtml(templateName, validator.getDir());
     const template = Handlebars.compile(html);
-    return template({ data: data });
+    const filledTemplate: string = template({ data: data });
+    return await inlineCss(filledTemplate, { url: 'filePath' });
   }
 
   async createWithExample(templateName: string) {
@@ -30,23 +31,14 @@ export class TemplateFactory {
     await validator.validate(validator.exampleData());
     const html = await this.getHtml(templateName, validator.getDir());
     const template = Handlebars.compile(html);
-
-    console.log('itt jio');
-    return template({ data: validator.exampleData() });
+    const filledTemplate: string = template({ data: validator.exampleData() });
+    return await inlineCss(filledTemplate, { url: 'filePath' });
   }
 
-  async getHtml(
-    templateName: string,
-    dir: string,
-    isInlineCss = true,
-  ): Promise<string> {
+  async getHtml(templateName: string, dir: string): Promise<string> {
     const htmlPath = path.join(dir, `${templateName}.handlebars`);
     try {
-      let html = fs.readFileSync(htmlPath).toString();
-      if (isInlineCss) {
-        html = await inlineCss(html, { url: 'filePath' });
-      }
-      return html;
+      return fs.readFileSync(htmlPath).toString();
     } catch (e) {
       console.log(e);
       throw new HttpException(

@@ -14,7 +14,7 @@ export class TestTemplateValidator extends TemplateValidatorAbstract<ITestTempla
     return {
       title: 'test title',
       description: 'This is a test description',
-      backgroundColor: '#DEB887',
+      color: '#DEB887',
     };
   }
 }
@@ -24,12 +24,12 @@ export interface ITestTemplateData {
 
   description: string;
 
-  backgroundColor: string;
+  color: string;
 }
 
 export class TestTemplateDataDto implements ITestTemplateData {
   @IsString()
-  backgroundColor: string;
+  color: string;
 
   @IsString()
   description: string;

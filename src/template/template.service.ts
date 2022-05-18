@@ -40,7 +40,7 @@ export class TemplateService {
     return this.templateFactory.createWithExample(templateName);
   }
 
-  findOne(name: string, data: any) {
+  getHtmlWithData(name: string, data: any) {
     return this.templateFactory.create(name, data);
   }
 
