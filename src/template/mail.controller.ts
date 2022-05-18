@@ -14,7 +14,7 @@ export class MailController {
   async findOne(
     @Body()
     body: {
-      mailOptions: Mail.Options;
+      mailOptions: Omit<Mail.Options, 'html'>;
       template: { name: string; data: any };
     },
   ) {

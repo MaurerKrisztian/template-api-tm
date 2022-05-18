@@ -11,8 +11,7 @@ import {
 import { TemplateService } from './template.service';
 import { Readable } from 'stream';
 import { Response } from 'express';
-import * as inlineCss from 'inline-css';
-import {PdfService} from "./services/PdfService";
+import { PdfService } from './services/PdfService';
 
 @Controller('template')
 export class TemplateController {
