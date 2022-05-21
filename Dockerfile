@@ -5,6 +5,7 @@ COPY package.json ./
 RUN npm install
 COPY . .
 
+RUN apk add fontconfig ttf-dejavu
 ENV PHANTOMJS_VERSION=2.1.1
 ENV PHANTOMJS_PATH=/usr/local/bin/phantomjs
 RUN apk update && apk add --no-cache fontconfig curl curl-dev && \
