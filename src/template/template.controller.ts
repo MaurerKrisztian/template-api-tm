@@ -63,7 +63,12 @@ export class TemplateController {
         Readable.from(pdf).pipe(res);
         break;
       case 'pdf_buffer':
-        res.setHeader('Content-disposition', 'attachment; filename=file.pdf');
+        res.header('Access-Control-Allow-Origin', '*');
+        res.header(
+          'Access-Control-Allow-Headers',
+          'Origin, X-Requested-With, Content-Type, Accept',
+        );
+        res.header('Content-disposition', 'attachment; filename=file.pdf');
         try {
           const pdfBuffer: any = await PdfService.resolvePdf(html);
           res.end(pdfBuffer);
