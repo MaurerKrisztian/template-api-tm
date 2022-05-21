@@ -12,6 +12,7 @@ import { MailModule } from './mail/mail.module';
     TemplateModule,
     ConfigModule.forRoot({
       envFilePath: '.env',
+      isGlobal: true
     }),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, 'playground'),
