@@ -75,7 +75,7 @@ async function refresh(){
         document.getElementById('preview').innerHTML = html
 
     document.getElementById('preview_pdf').innerHTML = "<hr> loading pdf.."
-    const pdfData = await fetch(templateUrl + "?type=pdf_buffer", { method: 'POST', headers: {
+    const pdfData = await fetch(templateUrl + "?type=pdf_stream", { method: 'POST', headers: {
             'Content-Type': 'application/json',
         }, body: JSON.stringify({data: JSON.parse(editor.getValue())})})
 
