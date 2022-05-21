@@ -4,7 +4,7 @@ COPY package*.json ./
 RUN npm ci
 COPY . .
 
-RUN npm run prebuild && npm run build && npm prune --production
+RUN npm install && npm run prebuild && npm run build && npm prune --production
 
 FROM node:14.19-alpine as server
 WORKDIR /opt/app/
