@@ -64,8 +64,13 @@ export class TemplateController {
         break;
       case 'pdf_buffer':
         res.setHeader('Content-disposition', 'attachment; filename=file.pdf');
-        const pdfBuffer: any = await PdfService.resolvePdf(html);
-        res.send(pdfBuffer);
+        try {
+          const pdfBuffer: any = await PdfService.resolvePdf(html);
+          res.send(pdfBuffer);
+        } catch (e) {
+          res.send('pdf generation failed ' + JSON.stringify(e)).status(500);
+        }
+        break;
       default:
         res.send(html);
     }
